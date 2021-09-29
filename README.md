@@ -34,7 +34,7 @@ An example program using the library is provided in the source directory [exampl
 
 ManualInit(SS_SEN_pin, MOSI_SDI_pin, MISO_SDO_pin, SCK_pin): special initialization required for boards other than the Uno/Nano Every/Mega/Leonardo/Zero/Due/ATmega8-based and derivatives which will not be fully initialized by the init() routine
 
-init(SENpinToUse, SDIpinToUse, SDOpinToUse, SCKpinToUse, LockPinNumber, Lock_Pin_Used, CEpin, CE_Pin_Used): initialize the HMC830 with specified SEN/SDI/SDO/SCK pins, lock pin and true/false for lock pin use and CE pin use - CE pin is typically LOW (disabled) on reset if used unless a pullup resistor is used and the CE pin is connected to a microcontroller pin which will float on reset
+init(SENpinToUse, SDIpinToUse, SDOpinToUse, SCKpinToUse, LockPinNumber, Lock_Pin_Used, CEpin, CE_Pin_Used): initialize the HMC830 with specified SEN/SDI/SDO/SCK pins, lock pin and true/false for lock pin use and CE pin use - CE pin is typically LOW (disabled) on reset if used unless a pullup resistor is used and the CE pin is connected to a microcontroller pin which will float on reset; depending on your board, this pin may have a pullup or pulldown resistor fitted
 
 SetStepFreq(frequency): sets the step frequency in Hz - returns an error code
 
@@ -61,6 +61,11 @@ Unusual step frequencies in non-precision mode ((RF frequency * divider) / GCD(V
 After power is applied to the HMC830, a rising edge of SCLK will select Open Mode (used by this library) or a rising edge of SEN (SPI SS) will select HMC Mode; it is essential that the init() function (and if your board is anything other than a Uno/Nano Every/Mega/Leonardo/Zero/Due or derivative, use of ManualInit() beforehand) is used before any other actions on any pins including SPI which are connected to the HMC830.
 
 Since the bootloader of most Arduino boards will flash an LED connected to Pin 13 (which depending on your microcontroller can have an SPI SCLK hardware function) on reset which along with unwanted power-on glitches will subsequently cause the HMC830 to select a mode when not wanted, it is also essential that the +3.3V supply to the HMC830 and the +3.3V side (connected to the HMC830 +3.3V) of the logic level translator be applied after a one second delay after power is applied to the Arduino.
+
+Default settings which may need to be changed as required BEFORE execution of MAX2870 library functions (defaults listed):
+
+Phase Detector Polarity (Register 0x0B/Bit 4 = 0): Positive (passive or noninverting active loop filter)
+
 
 Error codes:
 
