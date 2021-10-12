@@ -92,7 +92,6 @@ void ReadSweepValues(uint32_t *regs, uint16_t *subregs);
 void WriteSweepValues(const uint32_t *regs, const uint16_t *subregs);
 double ReadPFDfreq();
 
-void ManualInit(uint8_t SSpinToUse, uint8_t MOSIpinToUse, uint8_t MISOpinToUse, uint8_t SCKpinToUse);
 void init(uint8_t SENpinToUse, uint8_t SDIpinToUse, uint8_t SDOpinToUse, uint8_t SCKpinToUse, uint8_t LockPinNumber, bool Lock_Pin_Used, uint8_t CEpin, bool CE_Pin_Used);
 int SetStepFreq(uint32_t value);
 int setf(char *freq, uint8_t PowerLevel, uint8_t Outputs, bool PrecisionFrequency, uint32_t CalculationTimeout) ; // set freq and power levels and output mode
