@@ -1,6 +1,16 @@
 # HMC830
 Arduino Library for the HMC830 Wideband Frequency Synthesizer chip
 
+v1.0.0 First release
+
+v1.0.1 Double buffering of RF frequency divider implemented by default
+
+v1.1.0 Added current frequency read function
+
+v1.1.1 Corrected issue with conversion in ReadCurrentFreq
+
+v1.1.2 Add setPowerLevel function which can be used for frequency bursts
+
 ## Introduction
 
 This library supports the HMC830 from Analog Devices on Arduinos. The chip is a wideband (24.193549 MHz to 3 GHz) Phase-Locked Loop (PLL) and Voltage Controlled Oscillator (VCO), covering a very wide range frequency range under digital control. Just add an external PLL loop filter, Reference frequency source and a power supply for a very useful frequency generator for applications as a Local Oscillator or Sweep Generator.  
@@ -25,7 +35,7 @@ A low phase noise stable oscillator is required for this module. Typically, an O
 + Frequency Range: 24.193549 MHz to 3 GHz
 + Output Level: 0 dB to -9 dB (in 3 dB steps) 
 + In-Band Phase Noise: -110 dBc/Hz
-+ Signal On/Off control for the RF_P output
++ Signal On/Off control
 + All HMC830_R[] and HMC830_SubR5[] registers and HMC830_Icp (float) can be accessed and manipulated - in HMC Mode (used for this library), HMC830_R values start at Bit 1 of each element (Bit 0 in HMC Mode (Write) is irrevalent as per HMC830 Product & Operating Guide section 4.17.3.1) and Bits 25-31 are not to be modified (Write/_Read flag and Address); all HMC830_SubR5 registers start at Bit 7 and Bits 0-6 are not to be modified (VCO Subsystem ID and Register Address) as per HMC830 Product & Operating Guide section 5.7
 
 ## Library Use
@@ -49,6 +59,8 @@ setf(*frequency, PowerLevel, Outputs, PrecisionMode, FrequencyTimeout): set the 
 setrf(frequency, R_divider): set the reference frequency and reference divider R - default is 10 MHz/1 - a setf() is required to update reference divider R - returns an error code
 
 ReadSignature(): returns a true or false if the HMC830 signature matches
+
+setPowerLevel(PowerLevel): set the power level (0 to disable or 1-4) of both the RF_N and RF_P outputs and write to the HMC830 in one operation - returns an error code
 
 WriteSweepValues(*regs, *subregs): high speed write for registers when used for frequency sweep (*regs is uint32_t and size is as per HMC830_RegsToWrite, *subregs is uint16_t and size is as per HMC830_SubregsToWrite)
 

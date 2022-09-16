@@ -97,6 +97,7 @@ int SetStepFreq(uint32_t value);
 int setf(char *freq, uint8_t PowerLevel, uint8_t Outputs, bool PrecisionFrequency, uint32_t CalculationTimeout) ; // set freq and power levels and output mode
 int setrf(uint32_t f, uint16_t r) ; // set reference freq and reference divider (default is 10 MHz with divide by 1)
 bool CheckSignature(); // check BIST signature
+int setPowerLevel(uint8_t PowerLevel);
 
 // power on defaults
 uint32_t HMC830_reffreq = HMC830_REF_FREQ_DEFAULT;

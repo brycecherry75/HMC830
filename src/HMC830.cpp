@@ -431,9 +431,9 @@ int  HMC830::setf(char *freq, uint8_t PowerLevel, uint8_t Outputs, bool Precisio
   HMC830_R[0x04] = BitFieldManipulation.WriteBF_dword(1, 24, HMC830_R[0x04], HMC830_Frac);
   HMC830_R[0x0C] = BitFieldManipulation.WriteBF_dword(1, 14, HMC830_R[0x0C], HMC830_FFCR);
   HMC830_SubR5[0x02] = BitFieldManipulation.WriteBF_word((0 + 7), 6, HMC830_SubR5[0x02], HMC830_outdiv);
-  if (Outputs > 0 && PowerLevel > 0) { // enable RF output
+  if (Outputs > 0 && PowerLevel > 0) { // enable RF output on RP_P
     PowerLevel--;
-    HMC830_SubR5[0x02] = BitFieldManipulation.WriteBF_word((7 + 6), 2, HMC830_SubR5[0x02], PowerLevel);
+    HMC830_SubR5[0x02] = BitFieldManipulation.WriteBF_word((7 + 6), 2, HMC830_SubR5[0x02], PowerLevel); // affects both RF_N and RF_P
     HMC830_SubR5[0x01] = BitFieldManipulation.WriteBF_dword((7 + 0), 5, HMC830_SubR5[0x01], 0x1F);
     if (Outputs == 2) {
       Outputs = 0; // differential mode (both outputs enabled) - 1 is single ended mode
@@ -491,4 +491,18 @@ bool HMC830::CheckSignature() {
   else {
     return false;
   }
+}
+
+int HMC830::setPowerLevel(uint8_t PowerLevel) {
+  if (PowerLevel < 0 && PowerLevel > 4) return HMC830_ERROR_POWER_LEVEL;
+  if (PowerLevel > 0) {
+    PowerLevel--;
+    HMC830_SubR5[0x02] = BitFieldManipulation.WriteBF_word((7 + 6), 2, HMC830_SubR5[0x02], PowerLevel); // affects both RF_N and RF_P
+    HMC830_SubR5[0x01] = BitFieldManipulation.WriteBF_dword((7 + 2), 1, HMC830_SubR5[0x01], 1); // enable RF buffer
+  }
+  else { // disable RF output
+    HMC830_SubR5[0x01] = BitFieldManipulation.WriteBF_dword((7 + 2), 1, HMC830_SubR5[0x01], 0); // disable RF buffer
+  }
+  WriteRegs();
+  return HMC830_ERROR_NONE;
 }
